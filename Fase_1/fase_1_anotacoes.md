@@ -102,5 +102,9 @@ Neste curso passaremos mais por Fast API e Flask.
 3. Segurança: Proteger dados sensíveis e evitar ataques. Implementar autenticação, autorização, criptografia e monitoramento de segurança.
 4. Custo: Gerenciar os custos operacionais. Otimizar recursos, usar serviços sob demanda e monitorar gastos regularmente.
 
+## Aula 2 - Desenvolvimento de API com Flask
+Flask é um micro framework web para Python, ideal para criar APIs de forma rápida e simples. Ele é leve, flexível e fácil de aprender, tornando-o uma ótima escolha para projetos de Machine Learning.
+
+
 
 
