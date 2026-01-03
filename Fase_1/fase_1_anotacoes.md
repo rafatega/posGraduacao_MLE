@@ -302,7 +302,112 @@ Para isso funcionar, você precisa configurar a string de conexão e garantir qu
 
 ---
 
-Se quiser, posso te mostrar como configurar o Alembic em um projeto do zero ou gerar migrations com autogeração baseada nos seus modelos SQLAlchemy.
+#### 6. Black
+
+##### O que é?
+
+Black é uma ferramenta de **formatação automática de código Python**, também conhecida como "the uncompromising Python code formatter". Ela aplica um estilo de código consistente e padronizado, com base em decisões automáticas de formatação.
+
+---
+
+##### Para que serve?
+
+- Padronizar a formatação do código Python
+- Garantir um estilo consistente em toda a base de código
+- Evitar discussões sobre estilo em revisões de código
+- Facilitar a leitura e manutenção do código
+
+---
+
+##### Como funciona?
+
+Black lê os arquivos `.py` e reescreve o código seguindo regras rígidas e padronizadas, como:
+- Uso de aspas duplas por padrão
+- Linhas limitadas a 88 caracteres
+- Espaçamento consistente entre funções, classes, parâmetros, etc.
+- Formatação determinística: o mesmo código sempre resulta na mesma saída
+
+---
+
+##### Exemplo de uso
+
+- `'black .'` – Formata todos os arquivos Python na pasta atual
+- `'black meu_script.py'` – Formata um único arquivo
+
+---
+
+##### Quando usar?
+
+- Sempre que você quiser garantir que o estilo do código seja consistente
+- Em equipes que usam Git, para facilitar revisões e evitar diffs desnecessários
+- Antes de fazer commits, integrado a ferramentas como pre-commit hooks
+
+---
+
+##### Benefícios
+
+- Acelera o desenvolvimento ao eliminar decisões de formatação
+- Reduz conflitos de merge por diferenças de estilo
+- Ajuda a manter o código limpo e legível
+- Fácil de integrar com editores e pipelines de CI
+
+---
+
+#### 7. Flake8
+
+##### O que é?
+
+Flake8 é uma ferramenta de **análise estática de código Python**. Ela verifica o código em busca de problemas como erros de sintaxe, más práticas, uso incorreto de variáveis, e quebra de convenções do PEP 8.
+
+---
+
+##### Para que serve?
+
+- Identificar problemas de qualidade no código
+- Encorajar boas práticas de programação
+- Ajudar a manter o código limpo e dentro dos padrões da comunidade Python
+
+---
+
+##### Como funciona?
+
+Flake8 combina três ferramentas internas:
+- PyFlakes (erros de lógica e variáveis não usadas)
+- pycodestyle (regras do PEP 8)
+- McCabe (complexidade ciclomática)
+
+Ele analisa arquivos `.py` e aponta:
+- Linhas muito longas
+- Imports não utilizados
+- Variáveis definidas mas não usadas
+- Funções com complexidade excessiva
+
+---
+
+##### Exemplo de uso
+
+- `'flake8 .'` – Analisa todos os arquivos na pasta atual
+- `'flake8 meu_arquivo.py'` – Analisa um arquivo específico
+
+---
+
+##### Quando usar?
+
+- Durante o desenvolvimento, para evitar bugs e melhorar qualidade
+- Em pipelines de CI para garantir que o código esteja limpo antes de subir
+- Com outros linters/formatadores para uma análise mais completa
+
+---
+
+##### Benefícios
+
+- Ajuda a identificar problemas cedo
+- Complementa formatadores como Black (que não detecta problemas lógicos)
+- Pode ser customizado com plugins e configurações no `setup.cfg`, `tox.ini` ou `.flake8`
+
+---
+
+
 
 
 
