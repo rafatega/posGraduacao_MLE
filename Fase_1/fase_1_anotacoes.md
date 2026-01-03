@@ -105,6 +105,205 @@ Neste curso passaremos mais por Fast API e Flask.
 ## Aula 2 - Desenvolvimento de API com Flask
 Flask é um micro framework web para Python, ideal para criar APIs de forma rápida e simples. Ele é leve, flexível e fácil de aprender, tornando-o uma ótima escolha para projetos de Machine Learning.
 
+## Aula 4 - Ferramentas Necessárias I
+### Ferramentas Python: `pyenv`, `pipx` e `Poetry`
+
+#### 1. `pyenv`
+
+##### O que é?
+`pyenv` é uma ferramenta para **gerenciar múltiplas versões do Python** instaladas na sua máquina. Permite trocar facilmente entre versões específicas do Python, sem afetar a versão do sistema.
+
+##### Para que serve?
+- Instalar várias versões diferentes do Python.
+- Alternar entre versões, por projeto ou globalmente.
+- Testar compatibilidade do seu código em diferentes versões.
+
+##### Exemplo de uso
+Use `'pyenv install 3.10.6'` para instalar uma versão específica, e `'pyenv global 3.10.6'` para definir como padrão.
+
+##### Quando usar?
+- Quando você trabalha com vários projetos que exigem versões diferentes do Python.
+- Quando quer manter a instalação do Python do sistema intacta.
+
+---
+
+#### 2. `pipx`
+
+##### O que é?
+`pipx` serve para **instalar e rodar ferramentas de linha de comando escritas em Python** em ambientes isolados.
+
+##### Para que serve?
+- Instalar utilitários como `black`, `httpie`, `poetry`, `cookiecutter`, etc., sem interferir no ambiente Python do sistema.
+- Rodar ferramentas diretamente do terminal com segurança.
+
+##### Exemplo de uso
+Use `'pipx install black'` para instalar a ferramenta, e depois execute com `'black .'`.
+
+##### Quando usar?
+- Quando quiser instalar ferramentas de desenvolvimento Python de forma segura e isolada.
+- Para manter seu ambiente global mais limpo e estável.
+
+---
+
+#### 3. `Poetry`
+
+##### O que é?
+`Poetry` é uma ferramenta all-in-one para **gerenciar dependências, ambientes virtuais e empacotar projetos Python**.
+
+##### Para que serve?
+- Criar projetos com estrutura profissional.
+- Instalar e travar dependências usando `pyproject.toml`.
+- Gerenciar ambientes virtuais automaticamente.
+- Publicar bibliotecas no PyPI.
+
+##### Exemplo de uso
+Use `'poetry new meu_projeto'` para criar um novo projeto, `'poetry add requests'` para adicionar dependências, e `'poetry run python script.py'` para rodar scripts.
+
+##### Quando usar?
+- Quando você quer um controle completo e moderno sobre as dependências do seu projeto.
+- Para manter ambientes limpos e reprodutíveis.
+- Ideal para projetos sérios ou de código aberto.
+
+---
+
+#### Comparativo Rápido
+
+| Ferramenta | Função Principal | Atua em | Quando Usar |
+|-----------|------------------|---------|-------------|
+| `pyenv` | Gerenciar versões do Python | Sistema | Quando precisa de múltiplas versões instaladas |
+| `pipx` | Rodar ferramentas CLI em ambientes isolados | Global | Quando instala ferramentas como `black`, `httpie` |
+| `Poetry` | Gerenciar projetos e dependências | Por projeto | Quando quer um ambiente limpo, moderno e organizado |
+
+---
+
+#### 4. Pydantic
+
+##### O que é?
+
+Pydantic é uma biblioteca Python para **validação de dados e criação de modelos de dados baseados em tipos**. Ela utiliza **anotações de tipo do Python** para validar automaticamente entradas e garantir que os dados estejam corretos antes de serem usados.
+
+É muito usada com frameworks como **FastAPI**, mas também é útil em qualquer aplicação Python que lide com dados estruturados.
+
+---
+
+##### Principais Recursos
+
+- Validação automática de dados usando `type hints`
+- Conversão automática de tipos (por exemplo, string para int se possível)
+- Modelos reutilizáveis e aninhados
+- Suporte a valores padrão e validações personalizadas
+- Compatível com o sistema de tipos do Python 3.7+
+
+---
+
+##### Exemplo de uso
+
+Criação de um modelo simples:
+
+Use `'from pydantic import BaseModel'` e crie uma classe herdando de `BaseModel`. A biblioteca validará os dados automaticamente ao criar instâncias.
+
+Exemplo básico:
+- `'class Usuario(BaseModel): nome: str; idade: int'`
+- `'usuario = Usuario(nome="Maria", idade="30")'`
+
+Neste exemplo, mesmo que `'idade'` seja passada como string, Pydantic irá convertê-la para inteiro.
+
+---
+
+##### Quando usar?
+
+- Ao lidar com **entrada de dados externos**, como JSONs de APIs, arquivos ou formulários.
+- Para garantir que suas funções recebam **dados bem formatados** e seguros.
+- Em **projetos modernos** que usam orientação a objetos e validação de dados centralizada.
+
+---
+
+##### Benefícios
+
+- Reduz erros causados por dados mal formatados
+- Garante consistência nos tipos de dados ao longo do código
+- Facilita a escrita de APIs mais seguras e confiáveis
+- Integração natural com editores, usando autocomplete e validação de tipos
+
+---
+
+##### Comparação com dataclasses
+
+| Característica        | `dataclasses`      | `pydantic.BaseModel` |
+|-----------------------|--------------------|-----------------------|
+| Validação automática  | Não                | Sim                   |
+| Conversão de tipos    | Não                | Sim                   |
+| Dependência externa   | Não                | Sim                   |
+| Suporte a JSON        | Limitado           | Avançado              |
+| Uso comum             | Estrutura interna  | Entrada/validação     |
+
+---
+
+#### 5. Alembic
+
+##### O que é?
+
+Alembic é uma ferramenta de **migração de banco de dados** para aplicações Python que utilizam **SQLAlchemy**. Ele permite controlar versões do esquema do banco de dados ao longo do tempo, de forma segura, reprodutível e organizada.
+
+---
+
+##### Para que serve?
+
+- Criar e aplicar **migrations** (alterações na estrutura do banco de dados)
+- Controlar o histórico de mudanças no banco
+- Compartilhar a estrutura do banco com outros desenvolvedores
+- Versionar alterações no schema junto com o código da aplicação
+
+---
+
+##### Como funciona?
+
+Alembic gera **scripts de migração** baseados nas mudanças feitas nos modelos SQLAlchemy. Esses scripts descrevem o que deve ser feito para atualizar (ou reverter) a estrutura do banco.
+
+Exemplos típicos de alterações:
+- Criar ou remover tabelas
+- Adicionar ou remover colunas
+- Alterar tipos de dados
+- Adicionar constraints ou índices
+
+---
+
+##### Exemplo de comandos comuns
+
+- `'alembic init alembic'` – Inicializa a estrutura do Alembic no projeto
+- `'alembic revision --autogenerate -m "create users table"'` – Cria uma nova migration automaticamente
+- `'alembic upgrade head'` – Aplica as migrations até a última versão
+- `'alembic downgrade -1'` – Desfaz a última migration
+
+---
+
+##### Quando usar?
+
+- Sempre que você estiver usando SQLAlchemy e quiser manter o banco de dados sincronizado com os modelos do seu código
+- Em projetos profissionais onde múltiplas pessoas trabalham no mesmo banco
+- Para versionar o schema do banco junto com o código-fonte
+
+---
+
+##### Integração com SQLAlchemy
+
+O Alembic foi feito para ser usado com **SQLAlchemy**, e consegue analisar os modelos ORM para gerar scripts de migração automaticamente com o parâmetro `--autogenerate`.
+
+Para isso funcionar, você precisa configurar a string de conexão e garantir que seus modelos estejam importados no contexto de execução do Alembic.
+
+---
+
+##### Benefícios
+
+- Permite evolução segura do banco de dados
+- Evita problemas em ambientes diferentes (dev, staging, produção)
+- Históricos de alterações podem ser revisados com versionamento Git
+- Suporte a upgrades e downgrades reversíveis
+
+---
+
+Se quiser, posso te mostrar como configurar o Alembic em um projeto do zero ou gerar migrations com autogeração baseada nos seus modelos SQLAlchemy.
+
 
 
 
