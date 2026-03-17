@@ -16,6 +16,7 @@
       - [RedShift](#redshift)
         - [Passos](#passos)
     - [Data Lake (S3, Data Lake e Data Lakehouse)](#data-lake-s3-data-lake-e-data-lakehouse)
+      - [CLI](#cli)
 
 
 # Fase 2 - Big Data Architecture
@@ -172,3 +173,6 @@ ORDER BY total_vendido DESC;
 - **S3 (Simple Storage Service)**: O Amazon S3 é um serviço de armazenamento em nuvem da AWS que oferece escalabilidade, durabilidade e segurança para armazenar e recuperar qualquer quantidade de dados a qualquer momento. Ele é amplamente utilizado como um componente fundamental em arquiteturas de Data Lake, permitindo que as organizações armazenem grandes volumes de dados em seu formato bruto, facilitando a análise avançada e o aprendizado de máquina. O S3 oferece recursos como controle de acesso, versionamento de objetos e integração com outros serviços da AWS para facilitar a gestão e análise dos dados armazenados.
 
 - **Tags dos buckets**: As tags são rótulos que podem ser atribuídos aos buckets do S3 para facilitar a organização, gerenciamento e controle de acesso aos dados. Elas permitem categorizar os buckets com base em critérios específicos, como ambiente (produção, desenvolvimento), departamento (vendas, marketing) ou tipo de dados (financeiros, clientes). As tags ajudam a identificar e localizar rapidamente os buckets relevantes, além de facilitar a aplicação de políticas de segurança e governança de dados. As tags podem ser colocadas direto nos buckets ou em objetos específicos dentro dos buckets, permitindo uma gestão mais granular dos dados armazenados no S3.
+
+#### CLI
+- 
