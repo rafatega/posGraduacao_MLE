@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "beautifulsoup4>=4.14.3",
+    "boto3>=1.42.44",
     "flasgger>=0.9.7.1",
     "flask>=3.1.2",
     "flask-httpauth>=4.8.0",
