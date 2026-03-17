@@ -9,10 +9,13 @@
       - [Criando com um contâiner com PostgreSQL](#criando-com-um-contâiner-com-postgresql)
       - [Criando um contâiner com MongoDB](#criando-um-contâiner-com-mongodb)
   - [Big Data Structures](#big-data-structures)
+    - [Diferença entre Data Lake e Data Warehouse](#diferença-entre-data-lake-e-data-warehouse)
     - [Data Werehouse (RedShift, BigQuery e SQL Data Warehouse)](#data-werehouse-redshift-bigquery-e-sql-data-warehouse)
       - [OLTP (Online Transaction Processing)](#oltp-online-transaction-processing)
       - [OLAP (Online Analytical Processing)](#olap-online-analytical-processing)
       - [RedShift](#redshift)
+        - [Passos](#passos)
+    - [Data Lake (S3, Data Lake e Data Lakehouse)](#data-lake-s3-data-lake-e-data-lakehouse)
 
 
 # Fase 2 - Big Data Architecture
@@ -104,7 +107,21 @@ docker ps
 
 ## Big Data Structures
 
+### Diferença entre Data Lake e Data Warehouse
+As diferenças entre Data Lake e Data Warehouse são significativas em termos de estrutura dos dados, flexibilidade, custo e casos de uso. O Data Lake é projetado para armazenar dados em seu formato bruto, oferecendo alta flexibilidade para lidar com dados variados, enquanto o Data Warehouse é estruturado para armazenar dados organizados e otimizados para consultas analíticas. O Data Lake é geralmente mais barato para grandes volumes de dados, mas pode exigir mais esforço para organizar e analisar os dados, enquanto o Data Warehouse pode ser mais caro devido à necessidade de estruturação e otimização, mas oferece melhor desempenho para consultas analíticas. Os casos de uso também diferem, com o Data Lake sendo mais adequado para análise avançada e aprendizado de máquina, enquanto o Data Warehouse é ideal para relatórios empresariais e suporte à decisão.
+
+| Característica          | Data Lake                               | Data Warehouse                          |
+|-------------------------|-----------------------------------------|-----------------------------------------|
+| Estrutura dos Dados     | Armazena dados em seu formato bruto      | Armazena dados estruturados             |
+| Flexibilidade           | Alta flexibilidade para dados variados   | Estrutura rígida, requer modelagem prévia |
+| Custo                   | Geralmente mais barato para grandes volumes de dados | Pode ser mais caro devido à necessidade de estruturação e otimização |
+| Casos de Uso            | Análise avançada, aprendizado de máquina, integração de dados | Relatórios empresariais, análise de negócios, suporte à decisão |
+
+Mais: https://www.databricks.com/glossary/data-lake-vs-data-warehouse
+
+
 ### Data Werehouse (RedShift, BigQuery e SQL Data Warehouse)
+São sistemas de armazenamento e análise de dados projetados para lidar com grandes volumes de dados e consultas complexas. Eles são otimizados para análise de dados e suporte à tomada de decisões, permitindo que as organizações armazenem, gerenciem e analisem grandes conjuntos de dados de forma eficiente. O ciclo dos dados em um data warehouse envolve a coleta, transformação, armazenamento e análise dos dados para obter insights valiosos para os negócios.
 
 ![Ciclo dos Dados](C:/Users/Tega/Documents/Projetos/posGraduacao_MLE/app/Imagens/cicloDosDados.png)
 
@@ -116,3 +133,38 @@ docker ps
 
 #### RedShift
 - **Definição**: RedShift é um serviço de data warehousing em nuvem da Amazon Web Services (AWS) que permite armazenar e analisar grandes volumes de dados usando SQL. Ele é projetado para ser escalável, rápido e fácil de usar, oferecendo recursos como armazenamento em colunas, compressão de dados e otimização de consultas para melhorar o desempenho das análises. RedShift é amplamente utilizado para análise de dados empresariais, relatórios e inteligência de negócios.
+
+##### Passos
+1. **Criação do Cluster**: O primeiro passo é criar um cluster RedShift, que é um conjunto de nós de computação que armazenam e processam os dados. Você pode escolher o tipo e o número de nós com base nas suas necessidades de desempenho e capacidade.
+2. **Abrir editor de query**: Após a criação do cluster, você pode usar o editor de query do RedShift para escrever e executar consultas SQL. O editor de query é uma interface gráfica que permite interagir com o cluster, criar tabelas, inserir dados e realizar análises.
+3. **Criar tabelas**: Com o editor de query, você pode criar tabelas para armazenar seus dados. Você pode definir a estrutura das tabelas, incluindo os tipos de dados e as chaves primárias.
+```sql 
+CREATE TABLE vendas (
+    id SERIAL PRIMARY KEY,
+    produto VARCHAR(255),
+    quantidade INT,
+    preco DECIMAL(10, 2),
+    data_venda DATE
+);
+```
+4. **Subir dados no S3**: Para carregar dados no RedShift, você pode usar o Amazon S3 como um repositório intermediário. Você pode fazer upload dos seus arquivos de dados para um bucket do S3 e, em seguida, usar o comando COPY para importar os dados para as tabelas do RedShift.
+```sql
+-- REVER ESSA PARTE DE CREDENCIAIS, POIS NÃO É RECOMENDADO COLOCAR AS CHAVES DE ACESSO DIRETAMENTE NO CÓDIGO
+COPY vendas
+FROM 's3://meu-bucket/vendas.csv'
+-- Credenciais IAM
+CREDENTIALS 'iam_role=SEU_ACCESS_KEY;aws_secret_access_key=SEU_SECRET_KEY'
+DELIMITER ','
+IGNOREHEADER 1
+CSV;
+```
+5. **Executar consultas**: Depois de carregar os dados, você pode executar consultas SQL para analisar os dados e obter insights. O RedShift é otimizado para consultas analíticas, permitindo que você execute operações complexas de agregação, junção e filtragem.
+```sql
+SELECT produto, SUM(quantidade) AS total_vendido
+FROM vendas
+GROUP BY produto
+ORDER BY total_vendido DESC;
+```
+
+### Data Lake (S3, Data Lake e Data Lakehouse)
+- **Definição**: Data Lake é um repositório centralizado que permite armazenar grandes volumes de dados em seu formato bruto, sem a necessidade de estruturação prévia. Ele é projetado para lidar com dados variados, incluindo dados estruturados, semiestruturados e não estruturados, e é frequentemente usado para análise avançada, aprendizado de máquina e integração de dados. O Data Lakehouse é uma arquitetura que combina os benefícios do Data Lake e do Data Warehouse, permitindo o armazenamento de dados em seu formato bruto, mas também oferecendo recursos de consulta e análise semelhantes aos de um Data Warehouse tradicional.
