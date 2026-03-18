@@ -17,6 +17,10 @@
         - [Passos](#passos)
     - [Data Lake (S3, Data Lake e Data Lakehouse)](#data-lake-s3-data-lake-e-data-lakehouse)
       - [CLI](#cli)
+        - [Comandos básicos do CLI para S3:](#comandos-básicos-do-cli-para-s3)
+      - [boto3 Python SDK para AWS](#boto3-python-sdk-para-aws)
+    - [Data lakehouse (Data bricks, Apache Iceberg e Delta Lake)](#data-lakehouse-data-bricks-apache-iceberg-e-delta-lake)
+      - [Primeiros passos](#primeiros-passos)
 
 
 # Fase 2 - Big Data Architecture
@@ -175,4 +179,150 @@ ORDER BY total_vendido DESC;
 - **Tags dos buckets**: As tags são rótulos que podem ser atribuídos aos buckets do S3 para facilitar a organização, gerenciamento e controle de acesso aos dados. Elas permitem categorizar os buckets com base em critérios específicos, como ambiente (produção, desenvolvimento), departamento (vendas, marketing) ou tipo de dados (financeiros, clientes). As tags ajudam a identificar e localizar rapidamente os buckets relevantes, além de facilitar a aplicação de políticas de segurança e governança de dados. As tags podem ser colocadas direto nos buckets ou em objetos específicos dentro dos buckets, permitindo uma gestão mais granular dos dados armazenados no S3.
 
 #### CLI
-- 
+O CLI (Command Line Interface) é uma ferramenta de linha de comando que permite interagir com serviços e recursos de nuvem, como o Amazon S3, usando comandos de texto. Ele é amplamente utilizado para gerenciar e automatizar tarefas relacionadas ao armazenamento, como criar buckets, fazer upload e download de arquivos, configurar permissões e monitorar o uso do S3. O CLI oferece uma maneira eficiente e flexível de gerenciar os recursos do S3, especialmente para usuários que preferem trabalhar com a linha de comando ou precisam automatizar processos em larga escala. Com o CLI, os usuários podem executar operações complexas no S3 de forma rápida e fácil, sem a necessidade de acessar a interface gráfica do console da AWS.
+
+Link para download: [Download CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+
+##### Comandos básicos do CLI para S3:
+- **Criar um bucket**:
+```bash
+aws s3 mb s3://meu-bucket
+```
+> `mb` significa make bucket, ou seja, criar um bucket com o nome especificado.
+
+- **Listar buckets**:
+```bash
+aws s3 ls {bucket-name/path/path...} --region us-east-1
+```
+> `ls` significa list, ou seja, listar os buckets disponíveis.
+
+- **Deletar um bucket**:
+```bash
+aws s3 rm s3://meu-bucket/path/file.csv
+```
+> `rm` significa remove, ou seja, remover o bucket especificado.
+
+- **Copiar um arquivo para o S3**:
+```bash
+aws s3 cp "C:\Users\rafaeltegazzini\Documents\Pessoais\posGraduacao_MLE\app\Imagens\analogiaAPI.png" s3://meu-bucket/path/ --region us-east-1
+```
+> `cp` significa copy, ou seja, copiar um arquivo do local especificado para o bucket do S3.
+
+#### boto3 Python SDK para AWS
+O boto3 é o SDK (Software Development Kit) oficial da Amazon Web Services (AWS) para Python, que permite aos desenvolvedores interagir com os serviços da AWS de forma programática. Ele fornece uma interface de alto nível para acessar e gerenciar recursos da AWS, como S3, EC2, DynamoDB, entre outros. Com o boto3, os desenvolvedores podem criar scripts e aplicativos que automatizam tarefas relacionadas à AWS, como upload e download de arquivos no S3, gerenciamento de instâncias EC2 e manipulação de dados em bancos de dados DynamoDB. O boto3 é amplamente utilizado para integrar aplicativos Python com os serviços da AWS, facilitando a construção de soluções escaláveis e eficientes na nuvem.
+```python
+import boto3
+from botocore.exceptions import NoCredentialsError
+
+def handle_s3(file_name, bucket, access_key, secret_key, action, object_name=None, prefix=None):
+    """
+    Autor: Vinicius Henrique dos Santos 
+    Empresa: FIAP
+    Materia: Big Data Storage Structures
+    Objetivo: Interagir com o data lake atraves do python 
+
+    === Parametros ===
+
+    file_name: Caminho completo do arquivo a ser enviado ou deletado, ex 'C:\Users\vinic\Downloads\pedidos.csv'
+    bucket: Nome do bucket S3 para o qual o arquivo será enviado ou de onde será deletado.
+    access_key: AWS Access Key ID.
+    secret_key: AWS Secret Access Key.
+    action: 'upload' para enviar o arquivo, 'delete' para deletar o arquivo do bucket, 'list' para ver os arquivos do bucket
+    object_name: Nome do objeto no bucket S3. Se None, file_name.
+    prefix: se voce deseja que o arquivo tenha prefixo no S3, usar.
+    True se a ação foi realizada com sucesso, False caso contrário.
+    """
+    session = boto3.Session(
+        aws_access_key_id=access_key,
+        aws_secret_access_key=secret_key
+    )
+    s3_client = session.client('s3')
+
+    try:
+        if action == 'upload':
+            if object_name is None:
+                object_name = file_name.split('/')[-1]
+            if prefix:
+                object_name = f"{prefix}/{object_name}"
+            s3_client.upload_file(file_name, bucket, object_name)
+        elif action == 'delete':
+            if object_name is None or prefix:
+                raise ValueError("Para deletar um objeto, o 'object_name' deve ser especificado e 'prefix' deve ser None ou vazio.")
+            s3_client.delete_object(Bucket=bucket, Key=object_name)
+        elif action == 'list':
+            paginator = s3_client.get_paginator('list_objects_v2')
+            for page in paginator.paginate(Bucket=bucket, Prefix=prefix):
+                for obj in page.get('Contents', []):
+                    print(obj['Key'])
+        else:
+            print(f"Ação '{action}' não reconhecida.")
+            return False
+    except NoCredentialsError:
+        print("As credenciais não estão disponíveis")
+        return False
+    except ValueError as ve:
+        print(ve)
+        return False
+    except Exception as e:
+        print(f"Erro ao realizar ação '{action}' no arquivo: {e}")
+        return False
+
+    return True
+
+# Exemplo de uso para upload:
+#handle_s3(r'C:\Users\vinic\Downloads\pedidos.csv',\
+#          'fiap-mlet-vinicius-2024',\
+#          '<access_key>',\
+#          '<secret_key>',\
+#          'upload',\
+#          'pedidos.csv',\
+#          'SP')
+
+# Exemplo de uso para delete:
+#handle_s3('pedidos.csv',\
+#          'fiap-mlet-vinicius-2024',\
+#          '<access_key>',\
+#          '<secret_key>',\
+#          'delete',\
+#          'pedidos.csv',\
+#          'SP')
+
+# Exemplo de uso para listagem:
+#handle_s3(None,\
+#          'fiap-mlet-vinicius-2024',\
+#          '<access_key>',\
+#          '<secret_key>',\
+#          'list',\
+#          prefix='SP')
+```
+
+### Data lakehouse (Data bricks, Apache Iceberg e Delta Lake)
+- **Definição**: O Data Lakehouse é uma arquitetura de armazenamento de dados que combina os benefícios do Data Lake e do Data Warehouse, permitindo o armazenamento de dados em seu formato bruto, mas também oferecendo recursos de consulta e análise semelhantes aos de um Data Warehouse tradicional. Ele é projetado para lidar com grandes volumes de dados variados, proporcionando flexibilidade para análise avançada e aprendizado de máquina, ao mesmo tempo em que oferece desempenho otimizado para consultas analíticas. O Data Lakehouse é uma solução moderna para organizações que buscam aproveitar ao máximo seus dados, permitindo a integração de dados estruturados e não estruturados em um único repositório, facilitando a análise e a tomada de decisões baseada em dados.
+
+Vamos começar usando a versão gratuita: [Community Edition](https://community.cloud.databricks.com/)
+Email: boolish99@gmail.com
+Senha: Padrão
+
+#### Primeiros passos
+1. Criar um cluster: No Databricks, você pode criar um cluster para executar seus notebooks e processar seus dados. O cluster é composto por nós de computação que trabalham juntos para executar suas tarefas. No Community Edition, a conta já vem com um cluster pré-configurado.
+2. Criar um notebook: Depois de criar o cluster, você pode criar um notebook para escrever e executar seu código. O Databricks suporta várias linguagens de programação, incluindo Python e SQL.
+```python 
+#pip install databricks-sql-connector
+from databricks import sql
+import os
+
+connection = sql.connect(
+                        server_hostname = "dbc-872a3102-6bc7.cloud.databricks.com",
+                        http_path = "/sql/1.0/warehouses/455a49b57a50e4b2",
+                        access_token = "<access_token>"
+                        )
+
+cursor = connection.cursor()
+
+cursor.execute("SELECT * from range(10)")
+print(cursor.fetchall())
+
+cursor.close()
+connection.close()
+```
+3. Carregar dados: Você pode carregar seus dados para o Databricks usando o recurso de upload de arquivos ou conectando-se a fontes de dados externas, como Amazon S3, Azure Blob Storage ou bancos de dados relacionais.
