@@ -21,6 +21,10 @@
       - [boto3 Python SDK para AWS](#boto3-python-sdk-para-aws)
     - [Data lakehouse (Data bricks, Apache Iceberg e Delta Lake)](#data-lakehouse-data-bricks-apache-iceberg-e-delta-lake)
       - [Primeiros passos](#primeiros-passos)
+  - [Big Data Cloud Platforms](#big-data-cloud-platforms)
+    - [AWS Glue](#aws-glue)
+      - [Visual ETL](#visual-etl)
+    - [AWS Lambda](#aws-lambda)
 
 
 # Fase 2 - Big Data Architecture
@@ -326,3 +330,14 @@ cursor.close()
 connection.close()
 ```
 3. Carregar dados: Você pode carregar seus dados para o Databricks usando o recurso de upload de arquivos ou conectando-se a fontes de dados externas, como Amazon S3, Azure Blob Storage ou bancos de dados relacionais.
+
+## Big Data Cloud Platforms
+
+### AWS Glue
+- **Definição**: AWS Glue é um serviço de ETL (Extract, Transform, Load) totalmente gerenciado pela Amazon Web Services (AWS) que facilita a preparação e o carregamento de dados para análise. Ele permite que os usuários criem, executem e monitorem pipelines de ETL para transformar e mover dados entre diferentes fontes e destinos, como bancos de dados, data lakes e data warehouses. O AWS Glue oferece recursos como descoberta automática de esquemas, geração de código ETL e integração com outros serviços da AWS, tornando-o uma solução eficiente para preparar dados para análise em larga escala. Com o AWS Glue, as organizações podem simplificar o processo de preparação de dados, economizar tempo e recursos, e acelerar a obtenção de insights valiosos a partir dos seus dados.
+
+#### Visual ETL
+O Visual ETL é uma abordagem de design de pipelines de ETL (Extract, Transform, Load) que utiliza uma interface gráfica para criar e gerenciar fluxos de trabalho de processamento de dados. Em vez de escrever código manualmente, os usuários podem arrastar e soltar componentes visuais para definir as etapas do processo de ETL, como extração de dados, transformação e carregamento. O Visual ETL facilita a criação de pipelines complexos, permitindo que os usuários visualizem o fluxo de dados e as dependências entre as etapas, tornando o processo mais intuitivo e acessível para profissionais que não são desenvolvedores. Essa abordagem é especialmente útil para equipes que desejam acelerar o desenvolvimento de pipelines de dados e melhorar a colaboração entre membros com diferentes níveis de experiência técnica.
+
+### AWS Lambda
+- **Definição**: AWS Lambda é um serviço de computação sem servidor (serverless) da Amazon Web Services (AWS) que permite executar código em resposta a eventos sem a necessidade de provisionar ou gerenciar servidores. Com o AWS Lambda, os desenvolvedores podem criar funções que são acionadas por eventos específicos, como alterações em um bucket do S3, atualizações em uma tabela do DynamoDB ou chamadas de API. O Lambda é altamente escalável, permitindo que as funções sejam executadas automaticamente em resposta a eventos, e os usuários pagam apenas pelo tempo de execução do código, tornando-o uma solução eficiente para tarefas de processamento de dados, automação e integração de serviços na nuvem. O AWS Lambda é amplamente utilizado para criar aplicativos sem servidor, processar dados em tempo real e construir arquiteturas orientadas a eventos na AWS.
