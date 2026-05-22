@@ -10,8 +10,12 @@ dependencies = [
     "flasgger>=0.9.7.1",
     "flask>=3.1.2",
     "flask-httpauth>=4.8.0",
+    "matplotlib>=3.10.9",
+    "numpy>=2.4.0",
     "pandas>=2.3.3",
     "pyarrow>=21.0.0",
     "requests>=2.32.5",
+    "scikit-learn>=1.8.0",
+    "seaborn>=0.13.2",
     "yfinance>=0.2.66",
 ]
